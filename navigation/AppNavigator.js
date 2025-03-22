@@ -13,11 +13,18 @@ const Stack = createStackNavigator();
 const AppNavigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="SchoolSearch">
+        <Stack.Screen 
+          name="SchoolSearch" 
+          component={SchoolSearchScreen}
+          options={{ title: 'Select Your School' }}
+        />
         <Stack.Screen 
           name="Login" 
-          component={LoginScreen} 
-          options={{ headerShown: false }}
+          component={LoginScreen}
+          options={({ route }) => ({ 
+            title: route.params.schoolName 
+          })}
         />
         <Stack.Screen 
           name="Home" 

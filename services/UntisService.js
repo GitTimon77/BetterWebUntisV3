@@ -9,10 +9,30 @@ class UntisService {
     this.sessionInfo = null;
   }
 
-  async initialize(school, username, password) {
+  async searchSchools(query) {
+    try {
+      const response = await axios.get('https://mobile.webuntis.com/WebUntis/schoolquery2.do', {
+        params: {
+          search: query,
+          client: 'ReactNativeApp'
+        }
+      });
+      
+      return response.data.schools.map(school => ({
+        id: school.id,
+        name: school.displayName,
+        city: school.city,
+        serverUrl: school.server
+      }));
+    } catch (error) {
+      throw new Error('Failed to search schools');
+    }
+  }
+
+  async initialize(schoolInfo, username, password) {
     this.client = axios.create({
-      baseURL: this.baseURL,
-      params: { school },
+      baseURL: schoolInfo.serverUrl,
+      params: { school: schoolInfo.schoolId },
       headers: {
         'Content-Type': 'application/json'
       }
@@ -23,6 +43,8 @@ class UntisService {
 
   async login(username, password) {
     try {
+      console.log(this.client)
+
       const response = await this.client.post('', {
         id: 'unique-id',
         method: 'authenticate',

@@ -1,40 +1,20 @@
 // App.js
-import React, { useEffect } from 'react';
-import { StatusBar } from 'react-native';
-import { ThemeProvider, useTheme } from './context/ThemeContext';
-import { ScheduleProvider } from './context/ScheduleContext';
-import AppNavigator from './navigation/AppNavigator';
-import NotificationService from './services/NotificationService';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './screens/HomeScreen'; // Update with your actual screens
+import LoginScreen from './screens/LoginScreen'; // Update with your actual screens
 
-const AppContent = () => {
-  const { theme, darkMode } = useTheme();
-  
-  useEffect(() => {
-    const setupNotifications = async () => {
-      await NotificationService.initialize();
-    };
-    
-    setupNotifications();
-  }, []);
-  
-  return (
-    <>
-      <StatusBar 
-        barStyle={theme.statusBar} 
-        backgroundColor={darkMode ? '#000000' : '#ffffff'} 
-      />
-      <AppNavigator />
-    </>
-  );
-};
+const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <ScheduleProvider>
-        <AppContent />
-      </ScheduleProvider>
-    </ThemeProvider>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
